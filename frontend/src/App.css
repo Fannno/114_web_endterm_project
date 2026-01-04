@@ -1,0 +1,145 @@
+/* 定義變數：綠色系主視覺 */
+:root {
+  --primary-color: #10b981;       /* 主色：翡翠綠 */
+  --primary-hover: #059669;       /* 懸停色：深綠 */
+  --bg-color: #f3f4f6;            /* 背景：淺灰 */
+  --text-main: #1f2937;           /* 文字：深灰 */
+  --text-secondary: #6b7280;      /* 次要文字：灰 */
+  --card-bg: #ffffff;             /* 卡片背景：白 */
+  --danger: #ef4444;              /* 警告色：紅 */
+}
+
+/* 全域設定 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* 主容器 */
+.container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+/* 標題樣式 */
+h1 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+/* 卡片設計 (登入/註冊框) */
+.card {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.card h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text-main);
+}
+
+/* 表單元件 */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  box-sizing: border-box; /* 重要：讓 padding 不會撐大寬度 */
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+/* 按鈕樣式 */
+button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* 主要按鈕 (綠色) */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* 登出/危險按鈕 */
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
+}
+
+/* 切換標籤 (登入/註冊切換) */
+.tab-group {
+  display: flex;
+  background: #e5e7eb;
+  padding: 4px;
+  border-radius: 0.5rem;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px;
+  font-size: 0.9rem;
+}
+
+.tab-btn.active {
+  background: white;
+  color: var(--primary-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 動畫 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

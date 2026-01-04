@@ -1,10 +1,13 @@
 import './App.css'
+import Signup from './Signup' 
 
 function App() {
   return (
-    <div className="app-container">
-      <h1>Frontend Setup Ready!</h1>
-    </div>
+    <>
+      <h1>CoinKeep 記帳系統</h1>
+      <p>註冊測試</p>
+      <Signup />
+    </>
   )
 }
 

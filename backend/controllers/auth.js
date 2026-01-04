@@ -37,3 +37,44 @@ export const signup = async (req, res) => {
         res.status(500).json({ message: '伺服器發生錯誤，請稍後再試' });
     }
 };
+
+// 處理登入邏輯
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // 檢查是否填寫
+        if (!email || !password) {
+            return res.status(400).json({ message: '請輸入 Email 和密碼' });
+        }
+
+        // 根據 Email 找使用者
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: '找不到此使用者' });
+        }
+
+        // 驗證密碼 
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: '密碼錯誤' });
+        }
+
+        // 驗證通過 -> 發放 JWT 通行證
+        const token = jwt.sign(
+            { id: user._id, name: user.name }, 
+            process.env.JWT_SECRET,            
+            { expiresIn: '1d' }                
+        );
+
+        res.status(200).json({ 
+            message: '登入成功！', 
+            token, 
+            user: { name: user.name, email: user.email } 
+        });
+
+    } catch (error) {
+        console.error('登入錯誤:', error);
+        res.status(500).json({ message: '伺服器錯誤' });
+    }
+};

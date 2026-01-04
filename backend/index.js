@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-//import signupRouter from './routes/signup.js';
+import signupRouter from './routes/auth.js';
 
 
 const app = express();
@@ -13,7 +13,7 @@ const connectDB = () => {
   return mongoose.connect(process.env.MONGO_URI);
 };
 
-//app.use('/api/signup', signupRouter);
+app.use('/api/auth', signupRouter);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });

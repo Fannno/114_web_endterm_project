@@ -1,0 +1,45 @@
+/* 全域 CSS 變數 */
+:root {
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --bg-gray: #f8fafc;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --danger: #ef4444;
+}
+
+/* 全域 body 樣式 */
+body {
+  font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-gray);
+  color: var(--text-main);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 全域標題樣式 */
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 0;
+}
+
+/* 全域按鈕樣式 */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}

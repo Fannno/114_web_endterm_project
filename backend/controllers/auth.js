@@ -17,14 +17,11 @@ export const signup = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: '這個 Email 已經註冊過了' });
         }
-        // 密碼加密
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // 建立新使用者
+        // 建立新使用者（密碼由 model 的 pre-save 處理加密）
         const newUser = new User({
             name,
             email,
-            password: hashedPassword
+            password 
         });
 
         // 存入資料庫
@@ -51,18 +48,24 @@ export const login = async (req, res) => {
         // 根據 Email 找使用者
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: '找不到此使用者' });
+            return res.status(400).json({ message: 'Email 或密碼錯誤' });
         }
 
         // 驗證密碼 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: '密碼錯誤' });
+            return res.status(400).json({ message: 'Email 或密碼錯誤' });
         }
 
         // 驗證通過 -> 發放 JWT 通行證
+        if (!process.env.JWT_SECRET) {
+            console.error('JWT_SECRET 環境變數未設定');
+            return res.status(500).json({ message: '伺服器配置錯誤' });
+        }
+
         const token = jwt.sign(
             { id: user._id, name: user.name }, 
+            // amazonq-ignore-next-line
             process.env.JWT_SECRET,            
             { expiresIn: '1d' }                
         );
@@ -70,7 +73,10 @@ export const login = async (req, res) => {
         res.status(200).json({ 
             message: '登入成功！', 
             token, 
-            user: { name: user.name, email: user.email } 
+            user: { 
+                name: user.name || '使用者', 
+                email: user.email 
+            } 
         });
 
     } catch (error) {

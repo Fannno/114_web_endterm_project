@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import signupRouter from './routes/auth.js';
-
+import expenseRoutes from './routes/expenses.js';
 
 const app = express();
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN }));
@@ -14,6 +14,7 @@ const connectDB = () => {
 };
 
 app.use('/api/auth', signupRouter);
+app.use('/api/expenses', expenseRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });

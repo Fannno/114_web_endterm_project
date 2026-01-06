@@ -44,7 +44,7 @@ function App() {
       {/* 未登入時顯示 Logo */}
       {!user && (
       <img 
-        src="/my-logo.png" 
+        src="my-logo.png" 
         alt="Logo" 
         style={{ 
           width: '45px', 

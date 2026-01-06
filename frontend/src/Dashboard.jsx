@@ -87,7 +87,7 @@ function Dashboard({ user }) {
       {/* 資產總覽卡片 */}
       <div className="balance-card" style={{ position: 'relative', overflow: 'hidden' }}>
         <img 
-          src="/my-logo.png" 
+          src="my-logo.png" 
           alt="Logo" 
           style={{ 
             position: 'absolute', 

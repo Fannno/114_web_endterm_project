@@ -6,7 +6,24 @@ import signupRouter from './routes/auth.js';
 import expenseRoutes from './routes/expenses.js';
 
 const app = express();
-app.use(cors({ origin: process.env.ALLOWED_ORIGIN }));
+// 定義允許的來源清單
+const allowedOrigins = [
+  process.env.ALLOWED_ORIGIN, // 雲端 GitHub Pages 網址
+  'http://localhost:5173',    // 本地 Vite 預設網址
+  'http://localhost:5500'     // 本地後端預防萬一
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // 允許沒有 origin 的請求 (例如 Postman) 或是在清單內的來源
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS blocked by server settings'));
+    }
+  },
+  credentials: true
+}));
 app.use(express.json());
 
 const connectDB = () => {

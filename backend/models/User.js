@@ -31,17 +31,14 @@ const userSchema = new mongoose.Schema({
 });
 
 // 密碼加密中介軟體
-userSchema.pre('save', async function(next) {
-  // 只有在密碼被修改時才加密
-  if (!this.isModified('password')) return next();
+userSchema.pre('save', async function() {
+  // 只有在密碼被修改時才處理
+  if (!this.isModified('password')) return;
   
-  try {
-    // 加密密碼
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
-  } catch (error) {
-    next(error);
-  }
+  // 直接處理加密，async 函式會自動處理 Promise
+  // 不需要手動呼叫 next()，這能避免在驗證失敗時發生 next 衝突
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 const User = mongoose.model('User', userSchema);

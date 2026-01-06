@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from './api';
 import './App.css';
 
-function Login({ onLogin }) { // 接收 onLogin 作為 props
+function Login({ onLogin }) {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  // 使用 src/api.js 的 axios instance，預設由 Vite 環境變數或 localhost 決定
 
   const handleChange = (e) => {
     setFormData({
@@ -18,7 +19,7 @@ function Login({ onLogin }) { // 接收 onLogin 作為 props
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5500/api/auth/login', formData);
+      const response = await api.post('/auth/login', formData);
       
       // 取得 Token 和使用者資料
       const { token, user } = response.data;

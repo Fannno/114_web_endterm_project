@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import api from './api';
 import './App.css';
 
 function Dashboard({ user }) {
@@ -9,15 +9,12 @@ function Dashboard({ user }) {
     date: new Date().toISOString().split('T')[0]
   });
 
-  // 設定 API 請求配置
-  const token = localStorage.getItem('token');
-  const config = { headers: { Authorization: `Bearer ${token}` } };
-  const API_URL = 'http://localhost:5500/api/expenses';
-
-  // 使用 useCallback 包裝，確保 fetchExpenses 可以在 useEffect 中安全調用
+  // 使用 api instance；在每次請求時從 localStorage 重新取得 token
   const fetchExpenses = useCallback(async () => {
     try {
-      const res = await axios.get(API_URL, config);
+      const token = localStorage.getItem('token');
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const res = await api.get('/expenses', config);
       setExpenses(res.data);
     } catch (err) {
       console.error('資料載入失敗:', err);
@@ -58,7 +55,9 @@ function Dashboard({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(API_URL, formData, config);
+      const token = localStorage.getItem('token');
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      await api.post('/expenses', formData, config);
       alert('記帳成功！');
       // 重置表單為預設值
       setFormData({
@@ -74,7 +73,9 @@ function Dashboard({ user }) {
   const handleDelete = async (id) => {
     if (!window.confirm('確定要刪除這筆紀錄嗎？')) return;
     try {
-      await axios.delete(`${API_URL}/${id}`, config);
+      const token = localStorage.getItem('token');
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      await api.delete(`/expenses/${id}`, config);
       fetchExpenses();
     } catch (err) {
       alert('刪除失敗');

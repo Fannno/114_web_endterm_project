@@ -40,10 +40,21 @@ function App() {
         alignItems: 'center', 
         marginBottom: '20px' 
       }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      {/* 未登入時顯示 Logo */}
+      {!user && (
+      <img 
+        src="/my-logo.png" 
+        alt="Logo" 
+        style={{ 
+          width: '45px', 
+          height: '45px'        
+        }}/>
+      )}
         <h1 style={{ margin: 0, fontSize: user ? '1.5rem' : '2.5rem' }}>
           {user ? `${user?.name || '使用者'} 的帳本` : 'CoinKeep'}
         </h1>
-        
+        </div>
         {user && (
           <button onClick={handleLogout} className="logout-btn">
             登出

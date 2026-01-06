@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from './api';
 import './App.css'; 
 
 function Signup() {
@@ -20,7 +20,7 @@ function Signup() {
     e.preventDefault();
     try {
       // 發送 POST 請求給後端 API
-      await axios.post('http://localhost:5500/api/auth/signup', formData);
+        await api.post('/auth/signup', formData);
       alert('註冊成功！請切換到登入頁面進行登入。');
     } catch (error) {
       console.error(error);

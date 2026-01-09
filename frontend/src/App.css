@@ -217,6 +217,19 @@
   color: var(--danger);
 }
 
+.edit-btn {
+  color: #cbd5e1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 5px;
+}
+
+.edit-btn:hover {
+  color: var(--primary);
+}
+
 /* 響應式設計 */
 @media (max-width: 600px) {
   .stats-grid {

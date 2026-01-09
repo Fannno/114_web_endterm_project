@@ -7,17 +7,57 @@ function Login({ onLogin }) {
     email: '',
     password: ''
   });
+  const [errors, setErrors] = useState({});
   // 使用 src/api.js 的 axios instance，預設由 Vite 環境變數或 localhost 決定
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // 清除該欄位錯誤
+    setErrors(prev => {
+      if (!prev[name]) return prev;
+      const copy = { ...prev };
+      delete copy[name];
+      return copy;
     });
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const newErrors = { ...errors };
+    if (name === 'email') {
+      if (!value || value.trim() === '') newErrors.email = '請輸入Email';
+      else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) newErrors.email = 'Email格式不正確';
+        else delete newErrors.email;
+      }
+    }
+    if (name === 'password') {
+      if (!value || value.trim() === '') newErrors.password = '請輸入密碼';
+      else delete newErrors.password;
+    }
+    setErrors(newErrors);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // 簡單前端檢查 email 格式
+    const email = formData.email || '';
+    const newErrors = {};
+    if (!email.trim()) newErrors.email = '請輸入Email';
+    else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) newErrors.email = 'Email格式不正確';
+    }
+    // 檢查密碼是否有輸入（不做格式驗證）
+    if (!formData.password || formData.password.trim() === '') {
+      newErrors.password = '請輸入密碼';
+    }
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
     try {
       const response = await api.post('/auth/login', formData);
       
@@ -47,16 +87,18 @@ function Login({ onLogin }) {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          required
+          onBlur={handleBlur}
         />
+        {errors.email && <small style={{ color: '#ff4d4f' }}>{errors.email}</small>}
         <input
           type="password"
           name="password"
           placeholder="密碼"
           value={formData.password}
           onChange={handleChange}
-          required
+          onBlur={handleBlur}
         />
+        {errors.password && <small style={{ color: '#ff4d4f' }}>{errors.password}</small>}
         <button type="submit" className="btn-primary">登入</button>
       </form>
     </div>

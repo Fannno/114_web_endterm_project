@@ -12,5 +12,8 @@
   - Header: `Authorization: Bearer <token>`
 - **POST /api/expenses**
   - 描述：新增一筆帳目（包含標題、金額、類型、日期）。
+- PATCH /api/expenses/:id
+  - 描述：修改指定 ID 的帳目資料。
+  - 說明：支援部分更新，僅需傳送需要更動的欄位。
 - **DELETE /api/expenses/:id**
   - 描述：刪除指定 ID 的帳目。

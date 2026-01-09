@@ -82,6 +82,29 @@ function Dashboard({ user }) {
     }
   };
 
+  const handleEdit = async (item) => {
+    // 編輯流程：標題與金額
+    const newTitle = window.prompt('編輯標題', item.title);
+    if (newTitle === null) return; // 使用者取消
+    const newAmountStr = window.prompt('編輯金額', item.amount);
+    if (newAmountStr === null) return;
+    const newAmount = Number(newAmountStr);
+    if (Number.isNaN(newAmount)) {
+      alert('金額格式錯誤');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      await api.patch(`/expenses/${item._id}`, { title: newTitle, amount: newAmount }, config);
+      fetchExpenses();
+    } catch (err) {
+      console.error('更新失敗:', err);
+      alert('更新失敗');
+    }
+  };
+
   return (
     <div className="dashboard-wrapper">
       {/* 資產總覽卡片 */}
@@ -161,7 +184,10 @@ function Dashboard({ user }) {
                 <span className={item.type === 'income' ? 'text-green' : 'text-red'}>
                   {item.type === 'income' ? '+' : '-'}${item.amount.toLocaleString()}
                 </span>
-                <button className="del-btn" onClick={() => handleDelete(item._id)}>刪除</button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-end' }}>
+                  <button className="del-btn" onClick={() => handleDelete(item._id)}>刪除</button>
+                  <button className="edit-btn" onClick={() => handleEdit(item)}>編輯</button>
+                </div>
               </div>
             </div>
           ))}

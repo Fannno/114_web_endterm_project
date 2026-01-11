@@ -171,30 +171,40 @@ function Dashboard({ user }) {
         </form>
       </div>
 
-      {/* 歷史清單列表 */}
-      {sortedDates.map(date => (
-        <div key={date} className="date-group">
-          <span className="date-label">{date}</span>
-          {stats.grouped[date].map(item => (
-            <div key={item._id} className="expense-item">
-              <div className="expense-info">
-                <h4>{item.title}</h4>
-              </div>
-              <div className="expense-actions">
-                <span className={item.type === 'income' ? 'text-green' : 'text-red'}>
-                  {item.type === 'income' ? '+' : '-'}${item.amount.toLocaleString()}
-                </span>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-end' }}>
-                  <button className="del-btn" onClick={() => handleDelete(item._id)}>刪除</button>
-                  <button className="edit-btn" onClick={() => handleEdit(item)}>編輯</button>
-                </div>
-              </div>
+     {sortedDates.map(date => {
+  // 1. 計算本日總額 (這裡假設只算總金額，如果你有收入/支出，邏輯可能要改成 income - expense)
+  const dailyTotal = stats.grouped[date].reduce((sum, item) => sum + Number(item.amount), 0);
+
+  return (
+    <div key={date} className="date-group">
+      
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        <span className="date-label">{date}</span>
+        <span style={{ color: '#666', fontSize: '0.9rem', fontWeight: 'bold' }}>
+          本日小計: ${dailyTotal.toLocaleString()}
+        </span>
+      </div>
+
+      {stats.grouped[date].map(item => (
+        <div key={item._id} className="expense-item">
+          <div className="expense-info">
+            <h4>{item.title}</h4>
+          </div>
+          <div className="expense-actions">
+            <span className={item.type === 'income' ? 'text-green' : 'text-red'}>
+              {item.type === 'income' ? '+' : '-'}${item.amount.toLocaleString()}
+            </span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-end' }}>
+              <button className="del-btn" onClick={() => handleDelete(item._id)}>刪除</button>
+              <button className="edit-btn" onClick={() => handleEdit(item)}>編輯</button>
             </div>
-          ))}
+          </div>
         </div>
       ))}
     </div>
   );
+})}
+</div>
+);
 }
-
 export default Dashboard;

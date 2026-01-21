@@ -117,5 +117,4 @@ npm run dev
 2. 記帳操作：在儀表板輸入標題、金額與日期，系統將即時更新總餘額。
 3. 數據管理：使用者可隨時修改或刪除錯誤的帳目，系統會重新計算統計數據。
 
-### Demo 影片連結：[點擊此處觀看演示影片 (Google Drive)](https://drive.google.com/file/d/17bzkL9ppAVmQDvn_4-BXDimSwBXNRTCI/view?usp=sharing)
 ### 線上部署網站：[點擊前往 CoinKeep 記帳系統](https://fannno.github.io/114_web_endterm_project/)

@@ -1,10 +1,14 @@
-﻿using CoinKeep.Web.ViewModels.Account;
+﻿using CoinKeep.Web.BLL;
+using CoinKeep.Web.ViewModels.Account;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoinKeep.Web.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IAccountBLL accountBLL;
+        public AccountController(IAccountBLL accountBLL) { this.accountBLL = accountBLL; }
+
         /// <summary>
         /// 顯示登入頁面
         /// </summary>
@@ -46,7 +50,14 @@ namespace CoinKeep.Web.Controllers
             {
                 return View(registerVM);
             }
-            return View(registerVM);
+           
+            string result = accountBLL.Register(registerVM);
+            if (!string.IsNullOrEmpty(result))
+            {
+                ModelState.AddModelError("Email", result);
+                return View(registerVM);
+            }
+            return RedirectToAction("Login");
         }
     }
 }

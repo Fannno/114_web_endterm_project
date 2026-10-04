@@ -9,7 +9,7 @@ namespace CoinKeep.Web.ViewModels.Account
         /// </summary>
         [Required(ErrorMessage = "請輸入使用者名稱")]
         [Display(Name = "使用者名稱")]
-        public string Username { get; set; } = "";
+        public string UserName { get; set; } = "";
 
         /// <summary>
         /// 電子郵件

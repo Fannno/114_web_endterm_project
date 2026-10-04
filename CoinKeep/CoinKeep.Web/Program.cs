@@ -1,7 +1,12 @@
+using CoinKeep.Web.BLL;
+using CoinKeep.Web.DAL;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IAccountBLL, AccountBLL>();
+builder.Services.AddScoped<IAccountDAL, AccountDAL>();
 
 var app = builder.Build();
 

@@ -9,7 +9,7 @@ namespace CoinKeep.Web.Models
         /// 使用者 ID
         /// </summary>
         [DisplayName("使用者 ID")]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         /// <summary>
         /// 使用者名稱

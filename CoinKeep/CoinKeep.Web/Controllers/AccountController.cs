@@ -1,4 +1,5 @@
 ﻿using CoinKeep.Web.BLL;
+using CoinKeep.Web.Models;
 using CoinKeep.Web.ViewModels.Account;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,16 @@ namespace CoinKeep.Web.Controllers
             {
                 return View(loginVM);
             }
-            return View(loginVM);
+
+            User? user = accountBLL.Login(loginVM);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "電子郵件或密碼錯誤");
+                return View(loginVM);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>

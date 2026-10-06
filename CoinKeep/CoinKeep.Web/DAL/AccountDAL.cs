@@ -1,5 +1,6 @@
 ﻿using CoinKeep.Web.Models;
 using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace CoinKeep.Web.DAL
 {
@@ -67,6 +68,47 @@ namespace CoinKeep.Web.DAL
                 int cnt = Convert.ToInt32(cmd.ExecuteScalar());
                 return cnt > 0;
             }
+        }
+
+        /// <summary>
+        /// 依電子郵件取得使用者資料
+        /// </summary>
+        /// <param name="email">電子郵件</param>
+        /// <returns>使用者資料</returns>
+        public User? GetUserByEmail(string email)
+        {
+            DataTable dt = new DataTable();
+            string sql = @"SELECT UserId, UserName, Email, PasswordHash, CreatedAt
+                           FROM Users
+                           WHERE Email = @Email";
+
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+                }
+            }
+
+            if (dt.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            DataRow row = dt.Rows[0];
+            User user = new User
+            {
+                UserId = Convert.ToInt32(row["UserId"]),
+                UserName = row["UserName"].ToString(),
+                Email = row["Email"].ToString(),
+                PasswordHash = row["PasswordHash"].ToString(),
+                CreatedAt = Convert.ToDateTime(row["CreatedAt"])
+            };
+            return user;
         }
     }
 }

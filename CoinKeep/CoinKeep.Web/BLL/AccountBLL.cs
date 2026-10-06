@@ -38,5 +38,35 @@ namespace CoinKeep.Web.BLL
 
             return "";
         }
+
+        /// <summary>
+        /// 驗證使用者登入資料
+        /// </summary>
+        /// <param name="loginVM">登入資料</param>
+        /// <returns>登入成功回傳使用者資料，失敗回傳 null</returns>
+        public User? Login(LoginViewModel loginVM)
+        {
+            User? user = accountDAL.GetUserByEmail(loginVM.Email);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            PasswordHasher<User> passwordHasher = new PasswordHasher<User>();
+
+            PasswordVerificationResult result = passwordHasher.VerifyHashedPassword(
+                user,
+                user.PasswordHash,
+                loginVM.Password
+            );
+
+            if (result == PasswordVerificationResult.Failed)
+            {
+                return null;
+            }
+
+            return user;
+        }
     }
 }

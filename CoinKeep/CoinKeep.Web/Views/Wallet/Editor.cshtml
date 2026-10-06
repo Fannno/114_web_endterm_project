@@ -1,0 +1,79 @@
+﻿@model CoinKeep.Web.ViewModels.Wallet.WalletEditorViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    bool isEdit = Model.WalletId.HasValue;
+
+    ViewData["Title"] = isEdit
+        ? "編輯資金帳戶"
+        : "新增資金帳戶";
+
+    string actionName = isEdit
+        ? "Edit"
+        : "Create";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="mb-4">@ViewData["Title"]</h2>
+
+            @using (Html.BeginForm(actionName, "Wallet", FormMethod.Post))
+            {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+                @Html.HiddenFor(model => model.WalletId)
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.WalletName, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.WalletName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.WalletName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.WalletType, new { @class = "form-label" })
+
+                    @Html.DropDownListFor(
+                        model => model.WalletType,
+                        new List<SelectListItem>
+                        {
+                            new SelectListItem { Text = "現金", Value = "Cash" },
+                            new SelectListItem { Text = "銀行帳戶", Value = "Bank" },
+                            new SelectListItem { Text = "電子支付", Value = "EWallet" }
+                        },
+                        "請選擇帳戶類型",
+                        new { @class = "form-select" }
+                    )
+
+                    @Html.ValidationMessageFor(model => model.WalletType, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.InitialBalance, new { @class = "form-label" })
+                    @Html.TextBoxFor(
+                        model => model.InitialBalance,
+                        new
+                        {
+                            @class = "form-control",
+                            type = "number",
+                            step = "0.01",
+                            min = "0"
+                        }
+                    )
+                    @Html.ValidationMessageFor(model => model.InitialBalance, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        @(isEdit ? "儲存修改" : "新增")
+                    </button>
+                    <a asp-controller="Wallet" asp-action="Overview" class="btn btn-secondary">返回</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

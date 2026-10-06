@@ -64,5 +64,35 @@ namespace CoinKeep.Web.DAL
             }
             return walletList;
         }
+
+        /// <summary>
+        /// 新增資金帳戶
+        /// </summary>
+        /// <param name="wallet">資金帳戶資料</param>
+        public void CreateWallet(Wallet wallet)
+        {
+            string sql = @"INSERT INTO Wallets
+                         (
+                            UserId, WalletName, WalletType, InitialBalance
+                         )
+                         VALUES
+                         (
+                            @UserId, @WalletName, @WalletType, @InitialBalance
+                         )";
+
+            using (SqlConnection conn = new SqlConnection(this.GetDBConnectionString()))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", wallet.UserId);
+                    cmd.Parameters.AddWithValue("@WalletName", wallet.WalletName);
+                    cmd.Parameters.AddWithValue("@WalletType", wallet.WalletType);
+                    cmd.Parameters.AddWithValue("@InitialBalance", wallet.InitialBalance);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

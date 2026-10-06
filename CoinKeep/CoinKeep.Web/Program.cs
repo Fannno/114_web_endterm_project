@@ -15,6 +15,9 @@ builder.Services
 builder.Services.AddScoped<IAccountBLL, AccountBLL>();
 builder.Services.AddScoped<IAccountDAL, AccountDAL>();
 
+builder.Services.AddScoped<IWalletBLL, WalletBLL>();
+builder.Services.AddScoped<IWalletDAL, WalletDAL>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

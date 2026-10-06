@@ -2,6 +2,9 @@
 using CoinKeep.Web.Models;
 using CoinKeep.Web.ViewModels.Account;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace CoinKeep.Web.Controllers
 {
@@ -23,7 +26,7 @@ namespace CoinKeep.Web.Controllers
         /// </summary>
         /// <param name="loginVM">登入表單資料</param>
         [HttpPost]
-        public IActionResult Login(LoginViewModel loginVM)
+        public async Task<IActionResult> Login(LoginViewModel loginVM)
         {
             if (!ModelState.IsValid)
             {
@@ -38,7 +41,39 @@ namespace CoinKeep.Web.Controllers
                 return View(loginVM);
             }
 
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email)
+            };
+
+            ClaimsIdentity identity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal
+            );
+
             return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        /// 使用者登出
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            return RedirectToAction("Login");
         }
 
         /// <summary>

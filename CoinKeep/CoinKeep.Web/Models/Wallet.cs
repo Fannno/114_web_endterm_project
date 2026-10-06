@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 namespace CoinKeep.Web.Models
 {
     /// <summary>
-    /// 使用者資金帳戶資料
+    /// 使用者資產資料
     /// </summary>
     public class Wallet
     {
         /// <summary>
-        /// 資金帳戶 ID
+        /// 資產 ID
         /// </summary>
-        [DisplayName("資金帳戶 ID")]
+        [DisplayName("資產 ID")]
         public int WalletId { get; set; }
 
         /// <summary>
@@ -21,25 +21,25 @@ namespace CoinKeep.Web.Models
         public int UserId { get; set; }
 
         /// <summary>
-        /// 資金帳戶名稱
+        /// 資產名稱
         /// </summary>
         [Required]
         [MaxLength(50)]
-        [DisplayName("帳戶名稱")]
+        [DisplayName("資產名稱")]
         public string WalletName { get; set; } = "";
 
         /// <summary>
-        /// 資金帳戶類型
+        /// 資產類型
         /// </summary>
         [Required]
         [MaxLength(20)]
-        [DisplayName("帳戶類型")]
+        [DisplayName("資產類型")]
         public string WalletType { get; set; } = "";
 
         /// <summary>
-        /// 初始餘額
+        /// 初始金額
         /// </summary>
-        [DisplayName("初始餘額")]
+        [DisplayName("初始金額")]
         public decimal InitialBalance { get; set; }
 
         /// <summary>

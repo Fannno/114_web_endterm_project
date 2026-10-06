@@ -2,14 +2,14 @@
 
 ## 資料表總覽
 
-| 資料表 | 用途 |
-|---|---|
-| Users | 儲存使用者帳號與登入資料 |
-| Wallets | 儲存使用者資金帳戶 |
+| 資料表 | 中文名稱 | 用途 |
+|---|---|---|
+| Users | 使用者主檔 | 儲存使用者帳號與登入資料 |
+| Wallets | 錢包主檔 | 儲存使用者管理的現金、銀行存款與電子錢包等資金來源 |
 
 ---
 
-## Users
+## Users（使用者主檔）
 
 ### 用途
 
@@ -33,21 +33,21 @@
 
 ---
 
-## Wallets
+## Wallets（錢包主檔）
 
 ### 用途
 
-儲存使用者的現金、銀行與電子支付等資金帳戶。
+儲存使用者的現金、銀行存款與電子錢包等資產資料。
 
 ### 欄位設計
 
 | 欄位 | 型別 | PK/FK | Null | Default | 說明 |
 |---|---|---|---|---|---|
-| WalletId | INT | PK | NO | IDENTITY | 資金帳戶編號 |
+| WalletId | INT | PK | NO | IDENTITY | 資產編號 |
 | UserId | INT | FK → Users.UserId | NO |  | 所屬使用者 |
-| WalletName | NVARCHAR(50) |  | NO |  | 帳戶名稱 |
-| WalletType | NVARCHAR(20) |  | NO |  | 帳戶類型 |
-| InitialBalance | DECIMAL(18,2) |  | NO | 0 | 初始餘額 |
+| WalletName | NVARCHAR(50) |  | NO |  | 資產名稱 |
+| WalletType | NVARCHAR(20) |  | NO |  | 資產類型 |
+| InitialBalance | DECIMAL(18,2) |  | NO | 0 | 初始金額 |
 | IsActive | BIT |  | NO | 1 | 是否啟用 |
 | CreatedAt | DATETIME |  | NO | GETDATE() | 建立時間 |
 
@@ -59,4 +59,4 @@ Users 1 : N Wallets
 
 - Wallet 僅保存 InitialBalance。
 - 實際餘額後續由交易紀錄計算。
-- IsActive 用來停用帳戶，避免直接刪除已有交易紀錄的 Wallet。
+- IsActive 用來停用資產，避免直接刪除已有交易紀錄的 Wallet。

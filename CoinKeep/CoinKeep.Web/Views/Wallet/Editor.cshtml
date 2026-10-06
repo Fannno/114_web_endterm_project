@@ -5,8 +5,8 @@
     bool isEdit = Model.WalletId.HasValue;
 
     ViewData["Title"] = isEdit
-        ? "編輯資金帳戶"
-        : "新增資金帳戶";
+        ? "編輯資產"
+        : "新增資產";
 
     string actionName = isEdit
         ? "Edit"
@@ -38,10 +38,10 @@
                         new List<SelectListItem>
                         {
                             new SelectListItem { Text = "現金", Value = "Cash" },
-                            new SelectListItem { Text = "銀行帳戶", Value = "Bank" },
-                            new SelectListItem { Text = "電子支付", Value = "EWallet" }
+                            new SelectListItem { Text = "銀行存款", Value = "Bank" },
+                            new SelectListItem { Text = "電子錢包", Value = "EWallet" }
                         },
-                        "請選擇帳戶類型",
+                        "請選擇資產類型",
                         new { @class = "form-select" }
                     )
 

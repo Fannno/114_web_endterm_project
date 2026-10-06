@@ -14,7 +14,7 @@ namespace CoinKeep.Web.Controllers
         public WalletController(IWalletBLL walletBLL) { this.walletBLL = walletBLL; }
 
         /// <summary>
-        /// 顯示目前使用者的資金帳戶
+        /// 顯示目前使用者的資產
         /// </summary>
         public IActionResult Overview()
         {
@@ -26,12 +26,11 @@ namespace CoinKeep.Web.Controllers
 
             int userId = Convert.ToInt32(userIdValue);
             List<Wallet> walletList = walletBLL.GetWalletsByUserId(userId);
-
             return View(walletList);
         }
 
         /// <summary>
-        /// 顯示新增資金帳戶頁面
+        /// 顯示新增資產頁面
         /// </summary>
         public IActionResult Create()
         {
@@ -40,9 +39,9 @@ namespace CoinKeep.Web.Controllers
         }
 
         /// <summary>
-        /// 處理新增資金帳戶資料
+        /// 處理新增資產資料
         /// </summary>
-        /// <param name="createVM">新增資金帳戶表單資料</param>
+        /// <param name="createVM">新增資產表單資料</param>
         [HttpPost]
         public IActionResult Create(WalletEditorViewModel createVM)
         {
@@ -63,6 +62,55 @@ namespace CoinKeep.Web.Controllers
             {
                 ModelState.AddModelError("WalletType", result);
                 return View("Editor", createVM);
+            }
+            return RedirectToAction("Overview");
+        }
+
+        /// <summary>
+        /// 顯示編輯資產頁面
+        /// </summary>
+        /// <param name="id">資產 ID</param>
+        public IActionResult Edit(int id)
+        {
+            string? userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdValue))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int userId = Convert.ToInt32(userIdValue);
+            WalletEditorViewModel? walletVM = walletBLL.GetWalletById(id, userId);
+            if (walletVM == null)
+            {
+                return RedirectToAction("Overview");
+            }
+            return View("Editor", walletVM);
+        }
+
+        /// <summary>
+        /// 處理資產編輯資料
+        /// </summary>
+        /// <param name="walletVM">資產編輯資料</param>
+        [HttpPost]
+        public IActionResult Edit(WalletEditorViewModel walletVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Editor", walletVM);
+            }
+
+            string? userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdValue))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int userId = Convert.ToInt32(userIdValue);
+            string result = walletBLL.UpdateWallet(walletVM, userId);
+            if (!string.IsNullOrEmpty(result))
+            {
+                ModelState.AddModelError("", result);
+                return View("Editor", walletVM);
             }
             return RedirectToAction("Overview");
         }

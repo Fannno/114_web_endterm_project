@@ -59,9 +59,15 @@ namespace CoinKeep.Web.Controllers
 
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
+            AuthenticationProperties authProperties = new AuthenticationProperties
+            {
+                IsPersistent = loginVM.RememberMe
+            };
+
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                principal
+                principal,
+                authProperties
             );
 
             return RedirectToAction("Index", "Home");
